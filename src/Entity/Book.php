@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +16,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents a book.
  */
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    denormalizationContext: ['']
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'title' => 'ipartial',
+        'genre' => 'iexact',
+        'author.firstName' => 'ipartial'
+    ]
+)]
 class Book
 {
     /**
@@ -176,7 +188,6 @@ class Book
                 $review->setBook(null);
             }
         }
-
         return $this;
     }
 }

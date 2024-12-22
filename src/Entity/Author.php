@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +16,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ApiResource]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'firstName' => 'ipartial',
+        'lastName' => 'ipartial',
+    ]
+)]
 class Author
 {
     /**
